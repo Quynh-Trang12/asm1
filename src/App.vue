@@ -15,28 +15,22 @@ const searchCategory = ref('All')
 const formUsername = ref('')
 const formPassword = ref('')
 const formConfirmPassword = ref('')
-const formCategory = ref('Business') // Default required by assignment
-const formSelectedEventId = ref('') // We store the ID, but display the Name
+const formCategory = ref('Business') 
+const formSelectedEventId = ref('') 
 
-// --- COMPUTED PROPERTY FOR FILTERING ---
+// --- COMPUTED PROPERTIES ---
 const filteredEvents = computed(() => {
   return events.value.filter(event => {
-    // 1. Filter by ID
     const matchId = event.eventid.toLowerCase().includes(searchId.value.toLowerCase())
-    // 2. Filter by Name
     const matchName = event.eventname.toLowerCase().includes(searchName.value.toLowerCase())
-    // 3. Filter by Duration
     const matchDuration = searchDuration.value === '' || 
                           event.durationhour.toString().includes(searchDuration.value)
-    // 4. Filter by Category
     const matchCategory = searchCategory.value === 'All' || 
                           event.category === searchCategory.value
-
     return matchId && matchName && matchDuration && matchCategory
   })
 })
 
-// --- REGISTRATION FORM COMPUTED PROPERTIES ---
 const categoryEvents = computed(() => {
   return events.value.filter(e => e.category === formCategory.value)
 })
@@ -87,28 +81,61 @@ const passwordsMatch = computed(() => {
           <div class="col-md-4"><label for="searchDuration" class="form-label fw-bold">Duration (Hours):</label><input type="number" id="searchDuration" class="form-control" v-model="searchDuration" placeholder="e.g. 8"></div>
           
           <div class="col-12 mt-3">
-            <span class="form-label fw-bold d-block">Category:</span>
-            <div class="form-check form-check-inline"><input class="form-check-input" type="radio" id="catAll" value="All" v-model="searchCategory"><label class="form-check-label" for="catAll">All</label></div>
-            <div class="form-check form-check-inline"><input class="form-check-input" type="radio" id="catTech" value="Technology" v-model="searchCategory"><label class="form-check-label" for="catTech">Technology</label></div>
-            <div class="form-check form-check-inline"><input class="form-check-input" type="radio" id="catBus" value="Business" v-model="searchCategory"><label class="form-check-label" for="catBus">Business</label></div>
-            <div class="form-check form-check-inline"><input class="form-check-input" type="radio" id="catMark" value="Marketing" v-model="searchCategory"><label class="form-check-label" for="catMark">Marketing</label></div>
-            <div class="form-check form-check-inline"><input class="form-check-input" type="radio" id="catFin" value="Finance" v-model="searchCategory"><label class="form-check-label" for="catFin">Finance</label></div>
+            <span class="form-label fw-bold d-block mb-2">Category:</span>
+            <div class="radio-options-grid">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="catAll" value="All" v-model="searchCategory">
+                <label class="form-check-label" for="catAll">All</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="catTech" value="Technology" v-model="searchCategory">
+                <label class="form-check-label" for="catTech">Technology</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="catBus" value="Business" v-model="searchCategory">
+                <label class="form-check-label" for="catBus">Business</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="catMark" value="Marketing" v-model="searchCategory">
+                <label class="form-check-label" for="catMark">Marketing</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="catFin" value="Finance" v-model="searchCategory">
+                <label class="form-check-label" for="catFin">Finance</label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="table-responsive shadow-sm">
-        <table class="table table-hover table-bordered mb-0">
+
+      <div class="table-responsive shadow-sm rounded border">
+        <table class="table table-sm table-hover table-striped align-middle mb-0 table-mobile-fit table-consistent-height">
           <thead class="table-dark">
-            <tr><th>Event ID</th><th>Event Name</th><th>Category</th><th>Duration (Hours)</th></tr>
+            <tr>
+              <th scope="col" class="col-fit">Event ID</th>
+              <th scope="col">Event Name</th>
+              <th scope="col" class="col-fit">Category</th>
+              <th scope="col" class="col-fit text-center">Duration</th>
+            </tr>
           </thead>
           <tbody>
             <tr v-for="event in filteredEvents" :key="event.eventid">
-              <td>{{ event.eventid }}</td>
+              <td class="fw-bold col-fit">{{ event.eventid }}</td>
               <td>{{ event.eventname }}</td>
-              <td><span class="badge" :class="{'text-bg-primary': event.category === 'Technology','text-bg-success': event.category === 'Business','text-bg-warning': event.category === 'Marketing','text-bg-info': event.category === 'Finance'}">{{ event.category }}</span></td>
-              <td>{{ event.durationhour }}</td>
+              <td class="col-fit">
+                <span class="badge rounded-pill" 
+                      :class="{
+                        'text-bg-primary': event.category === 'Technology',
+                        'text-bg-success': event.category === 'Business',
+                        'text-bg-warning': event.category === 'Marketing',
+                        'text-bg-info': event.category === 'Finance'
+                      }">
+                  {{ event.category }}
+                </span>
+              </td>
+              <td class="text-center col-fit">{{ event.durationhour }}</td>
             </tr>
-            <tr v-if="filteredEvents.length === 0"><td colspan="4" class="text-center text-muted py-4">No events match your criteria.</td></tr>
+            <tr v-if="filteredEvents.length === 0"><td colspan="4" class="text-center text-muted py-5">No events match your criteria.</td></tr>
           </tbody>
         </table>
       </div>
@@ -125,48 +152,37 @@ const passwordsMatch = computed(() => {
             <div class="card-header bg-primary text-white">Register for an Event</div>
             <div class="card-body">
               <form @submit.prevent>
-                
                 <h3 class="h5 mb-3">Login Information</h3>
-                
-                <div class="mb-3">
-                  <label for="username" class="form-label">Username</label>
-                  <input type="text" id="username" class="form-control" v-model="formUsername" autocomplete="username">
-                </div>
-                
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input type="password" id="password" class="form-control" v-model="formPassword" autocomplete="new-password">
-                </div>
-                
+                <div class="mb-3"><label for="username" class="form-label">Username</label><input type="text" id="username" class="form-control" v-model="formUsername" autocomplete="username"></div>
+                <div class="mb-3"><label for="password" class="form-label">Password</label><input type="password" id="password" class="form-control" v-model="formPassword" autocomplete="new-password"></div>
                 <div class="mb-3">
                   <label for="confirmPassword" class="form-label">Confirm Password</label>
                   <input type="password" id="confirmPassword" class="form-control" v-model="formConfirmPassword" autocomplete="new-password">
-                  <div v-if="!passwordsMatch" class="text-danger mt-1 small">
-                    Passwords do not match!
-                  </div>
+                  <div v-if="!passwordsMatch" class="text-danger mt-1 small">Passwords do not match!</div>
                 </div>
 
                 <hr />
 
                 <h3 class="h5 mb-3">Select Event</h3>
-                
                 <div class="mb-3">
-                  <span class="form-label d-block">Event Category:</span>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="formCatBus" value="Business" v-model="formCategory">
-                    <label class="form-check-label" for="formCatBus">Business</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="formCatTech" value="Technology" v-model="formCategory">
-                    <label class="form-check-label" for="formCatTech">Technology</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="formCatMark" value="Marketing" v-model="formCategory">
-                    <label class="form-check-label" for="formCatMark">Marketing</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="formCatFin" value="Finance" v-model="formCategory">
-                    <label class="form-check-label" for="formCatFin">Finance</label>
+                  <span class="form-label d-block mb-2">Event Category:</span>
+                  <div class="radio-options-grid">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" id="formCatBus" value="Business" v-model="formCategory">
+                      <label class="form-check-label" for="formCatBus">Business</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" id="formCatTech" value="Technology" v-model="formCategory">
+                      <label class="form-check-label" for="formCatTech">Technology</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" id="formCatMark" value="Marketing" v-model="formCategory">
+                      <label class="form-check-label" for="formCatMark">Marketing</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" id="formCatFin" value="Finance" v-model="formCategory">
+                      <label class="form-check-label" for="formCatFin">Finance</label>
+                    </div>
                   </div>
                 </div>
 
@@ -179,7 +195,6 @@ const passwordsMatch = computed(() => {
                     </option>
                   </select>
                 </div>
-
               </form>
             </div>
           </div>
@@ -191,20 +206,9 @@ const passwordsMatch = computed(() => {
             <div class="card-body">
               <p class="card-text">Check your details below:</p>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                  <strong>Username:</strong> 
-                  <span v-if="formUsername" class="text-primary">{{ formUsername }}</span>
-                  <span v-else class="text-muted fst-italic">(Enter username)</span>
-                </li>
-                <li class="list-group-item">
-                  <strong>Selected Category:</strong> 
-                  <span class="text-primary">{{ formCategory }}</span>
-                </li>
-                <li class="list-group-item">
-                  <strong>Selected Event:</strong> 
-                  <span v-if="selectedEventObject" class="text-primary">{{ selectedEventObject.eventname }}</span>
-                  <span v-else class="text-muted fst-italic">(Please select an event)</span>
-                </li>
+                <li class="list-group-item"><strong>Username:</strong> <span v-if="formUsername" class="text-primary">{{ formUsername }}</span><span v-else class="text-muted fst-italic">(Enter username)</span></li>
+                <li class="list-group-item"><strong>Selected Category:</strong> <span class="text-primary">{{ formCategory }}</span></li>
+                <li class="list-group-item"><strong>Selected Event:</strong> <span v-if="selectedEventObject" class="text-primary">{{ selectedEventObject.eventname }}</span><span v-else class="text-muted fst-italic">(Please select an event)</span></li>
               </ul>
             </div>
           </div>
@@ -215,7 +219,3 @@ const passwordsMatch = computed(() => {
 
   </div>
 </template>
-
-<style scoped>
-
-</style>
