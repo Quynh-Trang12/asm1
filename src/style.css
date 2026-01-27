@@ -1,0 +1,31 @@
+/* src/style.css */
+
+/* Remove default Vue margins/paddings that break Bootstrap responsiveness */
+:root {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  /* Reset background to white for the assignment */
+  color: #212529;
+  background-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+/* IMPORTANT: Allow Bootstrap to handle the layout width */
+#app {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left; /* Reset text alignment so forms look correct */
+}
+
+/* Optional: Ensure link colors match Bootstrap defaults */
+a {
+  text-decoration: none;
+}
