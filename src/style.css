@@ -1,18 +1,24 @@
 :root {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.5;
-  color: #212529;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-light);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-light);
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+/* Smooth transitions for all interactive elements */
+.card, .btn, .form-control, .form-select {
+  transition: all 0.3s ease;
 }
 
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 235px; /* Offset for the sticky navbar so it doesn't cover content */
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 #app {
@@ -21,7 +27,7 @@ body {
   padding: 0;
 }
 
-/* --- PROFESSIONAL TABLE FIXES --- */
+/* --- TABLE FIXES --- */
 
 /* 1. Consistent Alignment */
 .table.align-middle td,
@@ -49,20 +55,6 @@ body {
     white-space: nowrap;
   }
 }
-
-/* --- THE HOLISTIC HOVER FIX --- */
-/* We do NOT use the standard .table-hover class. */
-/* Instead, we use this custom class which ONLY works if the device has a mouse. */
-@media (hover: hover) {
-  .table-hover-desktop tbody tr:hover > * {
-    /* Use Bootstrap's default hover variables */
-    --bs-table-accent-bg: var(--bs-table-hover-bg);
-    color: var(--bs-table-hover-color);
-  }
-}
-/* On mobile (hover: none), this block simply doesn't exist. */
-/* Therefore, tapping a row changes NOTHING. The gray stripe remains gray. */
-
 
 /* --- RADIO BUTTON GRID LAYOUT --- */
 .radio-options-grid {

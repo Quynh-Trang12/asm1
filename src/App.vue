@@ -166,9 +166,8 @@ const goToPage = (page) => {
   </div>
 
   <div class="container mt-4 mb-5">
-
     <h1 class="visually-hidden">Event Management System</h1>
-    
+
     <section class="mb-5">
       <h2 class="text-center mb-4">Why Choose Us</h2>
       <div class="row g-4">
@@ -357,16 +356,8 @@ const goToPage = (page) => {
 
               <td class="ps-1">{{ event.eventname }}</td>
 
-              <td class="col-fit ps-1">
-                <span
-                  class="badge rounded-pill"
-                  :class="{
-                    'text-bg-primary': event.category === 'Technology',
-                    'text-bg-success': event.category === 'Business',
-                    'text-bg-warning': event.category === 'Marketing',
-                    'text-bg-info': event.category === 'Finance',
-                  }"
-                >
+              <td>
+                <span class="category-label">
                   {{ event.category }}
                 </span>
               </td>
@@ -475,8 +466,7 @@ const goToPage = (page) => {
                     autocomplete="new-password"
                   />
                   <div v-if="!passwordsMatch" class="text-danger mt-1 small">
-                    The confirmed password that you enter hasn't matched with
-                    the original password.
+                    Password do not match.
                   </div>
                 </div>
 
@@ -656,7 +646,7 @@ table thead th {
 /* 2. Tablet & Desktop: Increase height when screen is wider than 768px */
 @media (min-width: 767px) {
   .banner-img {
-    height: 420px;
+    height: 580px;
   }
 }
 
