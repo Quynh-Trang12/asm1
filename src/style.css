@@ -2,12 +2,11 @@
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.5;
   color: #212529;
-  background-color: #f8f9fa;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px; /* Offset for the sticky navbar so it doesn't cover content */
+  scroll-padding-top: 235px; /* Offset for the sticky navbar so it doesn't cover content */
 }
 
 body {
@@ -25,7 +24,8 @@ body {
 /* --- PROFESSIONAL TABLE FIXES --- */
 
 /* 1. Consistent Alignment */
-.table.align-middle td {
+.table.align-middle td,
+.table.align-middle th {
   vertical-align: middle !important;
 }
 
