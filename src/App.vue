@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { events as eventData } from './data/events.js'
 
 // --- DATA ---
@@ -10,6 +10,10 @@ const searchId = ref('')
 const searchName = ref('')
 const searchDuration = ref('')
 const searchCategory = ref('All')
+
+// --- PAGINATION STATE ---
+const currentPage = ref(1)
+const itemsPerPage = 5 
 
 // --- REGISTRATION FORM STATE ---
 const formUsername = ref('')
@@ -31,6 +35,25 @@ const filteredEvents = computed(() => {
   })
 })
 
+const totalPages = computed(() => {
+  return Math.ceil(filteredEvents.value.length / itemsPerPage)
+})
+
+const paginatedEvents = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredEvents.value.slice(start, end)
+})
+
+const startItemIndex = computed(() => {
+  if (filteredEvents.value.length === 0) return 0
+  return (currentPage.value - 1) * itemsPerPage + 1
+})
+
+const endItemIndex = computed(() => {
+  return Math.min(currentPage.value * itemsPerPage, filteredEvents.value.length)
+})
+
 const categoryEvents = computed(() => {
   return events.value.filter(e => e.category === formCategory.value)
 })
@@ -43,6 +66,22 @@ const passwordsMatch = computed(() => {
   if (formConfirmPassword.value === '') return true
   return formPassword.value === formConfirmPassword.value
 })
+
+// --- WATCHERS ---
+watch([searchId, searchName, searchDuration, searchCategory], () => {
+  currentPage.value = 1
+})
+
+watch(formCategory, () => {
+  formSelectedEventId.value = ''
+})
+
+// --- METHODS ---
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
 </script>
 
 <template>
@@ -74,7 +113,7 @@ const passwordsMatch = computed(() => {
 
     <section id="event-information" class="mb-5">
       <h2 class="text-center mb-4">Event Information</h2>
-      <div class="card p-4 mb-4 bg-light border-0 shadow-sm">
+      <div class="card p-4 mb-4 bg-white border-0 shadow-sm">
         <div class="row g-3">
           <div class="col-md-4"><label for="searchId" class="form-label fw-bold">Event ID:</label><input type="text" id="searchId" class="form-control" v-model="searchId" placeholder="e.g. EVT10001"></div>
           <div class="col-md-4"><label for="searchName" class="form-label fw-bold">Event Name:</label><input type="text" id="searchName" class="form-control" v-model="searchName" placeholder="e.g. AI Summit"></div>
@@ -108,21 +147,26 @@ const passwordsMatch = computed(() => {
         </div>
       </div>
 
-      <div class="table-responsive shadow-sm rounded border">
-        <table class="table table-sm table-hover table-striped align-middle mb-0 table-mobile-fit table-consistent-height">
+      <div class="table-responsive shadow-sm rounded border bg-white">
+        <table class="table table-sm table-hover-desktop table-striped align-middle mb-0 table-mobile-fit table-consistent-height">
           <thead class="table-dark">
             <tr>
-              <th scope="col" class="col-fit">Event ID</th>
-              <th scope="col">Event Name</th>
-              <th scope="col" class="col-fit">Category</th>
-              <th scope="col" class="col-fit text-center">Duration</th>
+              <th scope="col" class="col-fit text-start ps-1">Event ID</th>
+              
+              <th scope="col" class="ps-1">Event Name</th>
+              
+              <th scope="col" class="col-fit ps-1">Category</th>
+              
+              <th scope="col" class="col-fit text-center pe-1">Duration Hours</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="event in filteredEvents" :key="event.eventid">
-              <td class="fw-bold col-fit">{{ event.eventid }}</td>
-              <td>{{ event.eventname }}</td>
-              <td class="col-fit">
+            <tr v-for="event in paginatedEvents" :key="event.eventid">
+              <td class="col-fit text-start pt-1 ps-1">{{ event.eventid }}</td>
+              
+              <td class="ps-1">{{ event.eventname }}</td>
+              
+              <td class="col-fit ps-1">
                 <span class="badge rounded-pill" 
                       :class="{
                         'text-bg-primary': event.category === 'Technology',
@@ -133,12 +177,40 @@ const passwordsMatch = computed(() => {
                   {{ event.category }}
                 </span>
               </td>
-              <td class="text-center col-fit">{{ event.durationhour }}</td>
+              
+              <td class="text-center col-fit pe-1">{{ event.durationhour }}</td>
             </tr>
             <tr v-if="filteredEvents.length === 0"><td colspan="4" class="text-center text-muted py-5">No events match your criteria.</td></tr>
           </tbody>
         </table>
       </div>
+
+      <nav v-if="totalPages > 1" aria-label="Event pagination" class="d-flex justify-content-between align-items-center mt-4 flex-column flex-sm-row">
+        
+        <div class="text-muted small mb-3 mb-sm-0">
+          Showing <strong>{{ startItemIndex }}</strong> - <strong>{{ endItemIndex }}</strong> of <strong>{{ filteredEvents.length }}</strong>
+        </div>
+
+        <ul class="pagination pagination-modern mb-0">
+          <li class="page-item" :class="{ disabled: currentPage === 1 }">
+            <button class="page-link" @click.prevent="goToPage(currentPage - 1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </button>
+          </li>
+          <li class="page-item" 
+              v-for="page in totalPages" 
+              :key="page" 
+              :class="{ active: currentPage === page }">
+            <button class="page-link" @click.prevent="goToPage(page)">{{ page }}</button>
+          </li>
+          <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+            <button class="page-link" @click.prevent="goToPage(currentPage + 1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+
+      </nav>
     </section>
 
     <hr class="my-5" />
@@ -148,22 +220,22 @@ const passwordsMatch = computed(() => {
       
       <div class="row">
         <div class="col-md-6">
-          <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">Register for an Event</div>
+          <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white fw-bold">Register for an Event</div>
             <div class="card-body">
               <form @submit.prevent>
-                <h3 class="h5 mb-3">Login Information</h3>
+                <h3 class="h5 mb-3 text-primary">Login Information</h3>
                 <div class="mb-3"><label for="username" class="form-label">Username</label><input type="text" id="username" class="form-control" v-model="formUsername" autocomplete="username"></div>
                 <div class="mb-3"><label for="password" class="form-label">Password</label><input type="password" id="password" class="form-control" v-model="formPassword" autocomplete="new-password"></div>
                 <div class="mb-3">
                   <label for="confirmPassword" class="form-label">Confirm Password</label>
                   <input type="password" id="confirmPassword" class="form-control" v-model="formConfirmPassword" autocomplete="new-password">
-                  <div v-if="!passwordsMatch" class="text-danger mt-1 small">Passwords do not match!</div>
+                  <div v-if="!passwordsMatch" class="text-danger mt-1 small">The confirmed password that you enter hasn't matched with the original password.</div>
                 </div>
 
                 <hr />
 
-                <h3 class="h5 mb-3">Select Event</h3>
+                <h3 class="h5 mb-3 text-primary">Select Event</h3>
                 <div class="mb-3">
                   <span class="form-label d-block mb-2">Event Category:</span>
                   <div class="radio-options-grid">
@@ -202,13 +274,13 @@ const passwordsMatch = computed(() => {
 
         <div class="col-md-6 mt-4 mt-md-0">
           <div class="card shadow-sm h-100 border-success">
-            <div class="card-header bg-success text-white">Registration Summary</div>
+            <div class="card-header bg-success text-white fw-bold">Registration Summary</div>
             <div class="card-body">
               <p class="card-text">Check your details below:</p>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>Username:</strong> <span v-if="formUsername" class="text-primary">{{ formUsername }}</span><span v-else class="text-muted fst-italic">(Enter username)</span></li>
-                <li class="list-group-item"><strong>Selected Category:</strong> <span class="text-primary">{{ formCategory }}</span></li>
-                <li class="list-group-item"><strong>Selected Event:</strong> <span v-if="selectedEventObject" class="text-primary">{{ selectedEventObject.eventname }}</span><span v-else class="text-muted fst-italic">(Please select an event)</span></li>
+                <li class="list-group-item"><strong>Username:</strong> <span v-if="formUsername" class="text-primary fw-bold">{{ formUsername }}</span><span v-else class="text-muted fst-italic">(Enter username)</span></li>
+                <li class="list-group-item"><strong>Selected Category:</strong> <span class="text-primary fw-bold">{{ formCategory }}</span></li>
+                <li class="list-group-item"><strong>Selected Event:</strong> <span v-if="selectedEventObject" class="text-primary fw-bold">{{ selectedEventObject.eventname }}</span><span v-else class="text-muted fst-italic">(Please select an event)</span></li>
               </ul>
             </div>
           </div>
@@ -219,3 +291,10 @@ const passwordsMatch = computed(() => {
 
   </div>
 </template>
+
+<style scoped>
+table thead th {
+  white-space: normal;
+  vertical-align: top !important;
+}
+</style>
