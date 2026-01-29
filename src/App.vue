@@ -85,13 +85,33 @@ const goToPage = (page) => {
 </script>
 
 <template>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-3">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4" href="#">Event Management System</a>
+      
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center text-center gap-3 gap-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#event-information">Event Information</a>
+          </li>
+          <li class="nav-item ms-lg-3">
+            <a class="btn btn-primary rounded-pill px-4 w-100 w-lg-auto" href="#registration-form">Registration Form</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
   <div class="container mt-4 mb-5">
     
-    <header class="text-center mb-4">
-      <h1 class="display-4 fw-bold">Event Management System</h1>
-    </header>
-
-    <div class="row mb-5">
+    <div class="row mb-5 pt-3" id="home">
       <div class="col-12">
         <img src="/banner.png" alt="Event Management Banner" class="img-fluid rounded shadow-sm w-100" @error="$event.target.src='https://via.placeholder.com/1200x400?text=Event+Banner+Placeholder'"/>
       </div>
@@ -111,7 +131,7 @@ const goToPage = (page) => {
 
     <hr class="my-5" />
 
-    <section id="event-information" class="mb-5">
+    <section id="event-information" class="mb-5 scroll-margin-top">
       <h2 class="text-center mb-4">Event Information</h2>
       <div class="card p-4 mb-4 bg-white border-0 shadow-sm">
         <div class="row g-3">
@@ -199,7 +219,7 @@ const goToPage = (page) => {
           </li>
           <li class="page-item" 
               v-for="page in totalPages" 
-              :key="page" 
+              v-bind:key="page" 
               :class="{ active: currentPage === page }">
             <button class="page-link" @click.prevent="goToPage(page)">{{ page }}</button>
           </li>
@@ -215,7 +235,7 @@ const goToPage = (page) => {
 
     <hr class="my-5" />
 
-    <section id="registration-form" class="mb-5">
+    <section id="registration-form" class="mb-5 scroll-margin-top">
       <h2 class="text-center mb-4">Registration Form</h2>
       
       <div class="row">
@@ -296,5 +316,10 @@ const goToPage = (page) => {
 table thead th {
   white-space: normal;
   vertical-align: top !important;
+}
+
+/* Add smooth scrolling offset so navbar doesn't cover section titles */
+.scroll-margin-top {
+  scroll-margin-top: 80px;
 }
 </style>

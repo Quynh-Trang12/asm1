@@ -5,6 +5,11 @@
   background-color: #f8f9fa;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Offset for the sticky navbar so it doesn't cover content */
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -20,8 +25,7 @@ body {
 /* --- PROFESSIONAL TABLE FIXES --- */
 
 /* 1. Consistent Alignment */
-.table.align-middle td, 
-.table.align-middle th {
+.table.align-middle td {
   vertical-align: middle !important;
 }
 
