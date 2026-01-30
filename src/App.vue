@@ -156,16 +156,17 @@ const goToPage = (page) => {
     </div>
   </nav>
 
-  <div class="container-fluid p-0 position-relative" id="home">
-    <img
-      src="/banner.png"
-      alt="Event Management Banner"
-      class="img-fluid w-100 d-block banner-img"
-    />
-    <div class="fade-overlay"></div>
-  </div>
+  <main>
+    <div class="container-fluid p-0 position-relative" id="home">
+      <img
+        src="/banner.png"
+        alt="Event Management Banner"
+        class="img-fluid w-100 d-block banner-img"
+      />
+      <div class="fade-overlay"></div>
+    </div>
 
-  <div class="container mt-4 mb-5">
+    <div class="container mt-4 mb-5">
     <h1 class="visually-hidden">Event Management System</h1>
 
     <section class="mb-5">
@@ -276,59 +277,61 @@ const goToPage = (page) => {
           </div>
 
           <div class="col-12 mt-3">
-            <span class="form-label fw-bold d-block mb-2">Category:</span>
-            <div class="radio-options-grid">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="catAll"
-                  value="All"
-                  v-model="searchCategory"
-                />
-                <label class="form-check-label" for="catAll">All</label>
+            <fieldset>
+              <legend class="form-label fw-bold">Category:</legend>
+              <div class="radio-options-grid">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="catAll"
+                    value="All"
+                    v-model="searchCategory"
+                  />
+                  <label class="form-check-label" for="catAll">All</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="catTech"
+                    value="Technology"
+                    v-model="searchCategory"
+                  />
+                  <label class="form-check-label" for="catTech">Technology</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="catBus"
+                    value="Business"
+                    v-model="searchCategory"
+                  />
+                  <label class="form-check-label" for="catBus">Business</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="catMark"
+                    value="Marketing"
+                    v-model="searchCategory"
+                  />
+                  <label class="form-check-label" for="catMark">Marketing</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="catFin"
+                    value="Finance"
+                    v-model="searchCategory"
+                  />
+                  <label class="form-check-label" for="catFin">Finance</label>
+                </div>
               </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="catTech"
-                  value="Technology"
-                  v-model="searchCategory"
-                />
-                <label class="form-check-label" for="catTech">Technology</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="catBus"
-                  value="Business"
-                  v-model="searchCategory"
-                />
-                <label class="form-check-label" for="catBus">Business</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="catMark"
-                  value="Marketing"
-                  v-model="searchCategory"
-                />
-                <label class="form-check-label" for="catMark">Marketing</label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="catFin"
-                  value="Finance"
-                  v-model="searchCategory"
-                />
-                <label class="form-check-label" for="catFin">Finance</label>
-              </div>
-            </div>
+            </fieldset>
           </div>
         </div>
       </div>
@@ -400,7 +403,12 @@ const goToPage = (page) => {
             v-bind:key="page"
             :class="{ active: currentPage === page }"
           >
-            <button class="page-link" @click.prevent="goToPage(page)">
+            <button 
+              class="page-link" 
+              @click.prevent="goToPage(page)"
+              :aria-label="'Go to page ' + page"
+              :aria-current="currentPage === page ? 'page' : undefined"
+            >
               {{ page }}
             </button>
           </li>
@@ -442,6 +450,7 @@ const goToPage = (page) => {
                     class="form-control"
                     v-model="formUsername"
                     autocomplete="username"
+                    required
                   />
                 </div>
                 <div class="mb-3">
@@ -452,6 +461,7 @@ const goToPage = (page) => {
                     class="form-control"
                     v-model="formPassword"
                     autocomplete="new-password"
+                    required
                   />
                 </div>
                 <div class="mb-3">
@@ -464,6 +474,7 @@ const goToPage = (page) => {
                     class="form-control"
                     v-model="formConfirmPassword"
                     autocomplete="new-password"
+                    required
                   />
                   <div v-if="!passwordsMatch" class="text-danger mt-1 small">
                     Password do not match.
@@ -474,57 +485,63 @@ const goToPage = (page) => {
 
                 <h3 class="h5 mb-3 text-primary">Select Event</h3>
                 <div class="mb-3">
-                  <span class="form-label d-block mb-2">Event Category:</span>
-                  <div class="radio-options-grid">
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        id="formCatBus"
-                        value="Business"
-                        v-model="formCategory"
-                      />
-                      <label class="form-check-label" for="formCatBus"
-                        >Business</label
-                      >
+                  <fieldset>
+                    <legend class="form-label">Event Category:</legend>
+                    <div class="radio-options-grid">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="formCatBus"
+                          value="Business"
+                          v-model="formCategory"
+                          required
+                        />
+                        <label class="form-check-label" for="formCatBus"
+                          >Business</label
+                        >
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="formCatTech"
+                          value="Technology"
+                          v-model="formCategory"
+                          required
+                        />
+                        <label class="form-check-label" for="formCatTech"
+                          >Technology</label
+                        >
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="formCatMark"
+                          value="Marketing"
+                          v-model="formCategory"
+                          required
+                        />
+                        <label class="form-check-label" for="formCatMark"
+                          >Marketing</label
+                        >
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="formCatFin"
+                          value="Finance"
+                          v-model="formCategory"
+                          required
+                        />
+                        <label class="form-check-label" for="formCatFin"
+                          >Finance</label
+                        >
+                      </div>
                     </div>
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        id="formCatTech"
-                        value="Technology"
-                        v-model="formCategory"
-                      />
-                      <label class="form-check-label" for="formCatTech"
-                        >Technology</label
-                      >
-                    </div>
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        id="formCatMark"
-                        value="Marketing"
-                        v-model="formCategory"
-                      />
-                      <label class="form-check-label" for="formCatMark"
-                        >Marketing</label
-                      >
-                    </div>
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        id="formCatFin"
-                        value="Finance"
-                        v-model="formCategory"
-                      />
-                      <label class="form-check-label" for="formCatFin"
-                        >Finance</label
-                      >
-                    </div>
-                  </div>
+                  </fieldset>
                 </div>
 
                 <div class="mb-3">
@@ -536,6 +553,7 @@ const goToPage = (page) => {
                     class="form-select"
                     v-model="formSelectedEventId"
                     :disabled="categoryEvents.length === 0"
+                    required
                   >
                     <option disabled value="">-- Select an Event --</option>
                     <option
@@ -590,6 +608,7 @@ const goToPage = (page) => {
       </div>
     </section>
   </div>
+  </main>
 </template>
 
 <style scoped>
@@ -666,4 +685,17 @@ table thead th {
 /* .page-item.disabled .page-link {
   color: #767676 !important; 
 } */
+
+/* Remove default fieldset styling to maintain visual appearance */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+fieldset legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
 </style>
