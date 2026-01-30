@@ -177,7 +177,7 @@ const goToPage = (page) => {
             <div class="card-body">
               <h3 class="card-title h5">Efficient Event Planning</h3>
               <p class="card-text">
-                We handle all the logistics so you can focus on the big picture.
+                We handle all the logistics so you can focus on important matters.
               </p>
             </div>
           </div>
@@ -219,7 +219,7 @@ const goToPage = (page) => {
             <div class="card-body">
               <h3 class="card-title h5">High Customer Satisfaction</h3>
               <p class="card-text">
-                Our clients love us! We prioritize your needs above all else.
+                Our clients love us! We prioritize your needs first and foremost.
               </p>
             </div>
           </div>
@@ -241,8 +241,9 @@ const goToPage = (page) => {
 
     <section id="event-information" class="mb-5 scroll-margin-top">
       <h2 class="text-center mb-4">Event Information</h2>
-      <div class="card p-4 mb-4 bg-white border-0 shadow-sm">
-        <div class="row g-3">
+      <div class="card p-4 mb-4 bg-white border-1 shadow-sm">
+        <fieldset class="row g-3">
+          <legend class="visually-hidden">Search Events</legend>
           <div class="col-md-4">
             <label for="searchId" class="form-label fw-bold">Event ID:</label
             ><input
@@ -333,7 +334,7 @@ const goToPage = (page) => {
               </div>
             </fieldset>
           </div>
-        </div>
+        </fieldset>
       </div>
 
       <div class="table-responsive shadow-sm rounded border">
@@ -437,134 +438,138 @@ const goToPage = (page) => {
         <div class="col-md-12">
           <div class="card shadow-sm border-0">
             <div class="card-header bg-primary text-white fw-bold">
-              Register for an Event
+              <h3 class="h5 mb-0">Register for an Event</h3>
             </div>
             <div class="card-body">
               <form @submit.prevent>
-                <h3 class="h5 mb-3 text-primary">Login Information</h3>
-                <div class="mb-3">
-                  <label for="username" class="form-label">Username</label
-                  ><input
-                    type="text"
-                    id="username"
-                    class="form-control"
-                    v-model="formUsername"
-                    autocomplete="username"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label
-                  ><input
-                    type="password"
-                    id="password"
-                    class="form-control"
-                    v-model="formPassword"
-                    autocomplete="new-password"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="confirmPassword" class="form-label"
-                    >Confirm Password</label
-                  >
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    class="form-control"
-                    v-model="formConfirmPassword"
-                    autocomplete="new-password"
-                    required
-                  />
-                  <div v-if="!passwordsMatch" class="text-danger mt-1 small">
-                    Password do not match.
+                <fieldset>
+                  <legend class="h6 mb-3 text-primary">Login Information</legend>
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Username</label
+                    ><input
+                      type="text"
+                      id="username"
+                      class="form-control"
+                      v-model="formUsername"
+                      autocomplete="username"
+                      required
+                    />
                   </div>
-                </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label
+                    ><input
+                      type="password"
+                      id="password"
+                      class="form-control"
+                      v-model="formPassword"
+                      autocomplete="new-password"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="confirmPassword" class="form-label"
+                      >Confirm Password</label
+                    >
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      class="form-control"
+                      v-model="formConfirmPassword"
+                      autocomplete="new-password"
+                      required
+                    />
+                    <div v-if="!passwordsMatch" class="text-danger mt-1 small">
+                      Password do not match.
+                    </div>
+                  </div>
+                </fieldset>
 
                 <hr />
 
-                <h3 class="h5 mb-3 text-primary">Select Event</h3>
-                <div class="mb-3">
-                  <fieldset>
-                    <legend class="form-label">Event Category:</legend>
-                    <div class="radio-options-grid">
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          id="formCatBus"
-                          value="Business"
-                          v-model="formCategory"
-                          required
-                        />
-                        <label class="form-check-label" for="formCatBus"
-                          >Business</label
-                        >
+                <fieldset>
+                  <legend class="h6 mb-3 text-primary">Select Event</legend>
+                  <div class="mb-3">
+                    <fieldset>
+                      <legend class="form-label">Event Category:</legend>
+                      <div class="radio-options-grid">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            id="formCatBus"
+                            value="Business"
+                            v-model="formCategory"
+                            required
+                          />
+                          <label class="form-check-label" for="formCatBus"
+                            >Business</label
+                          >
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            id="formCatTech"
+                            value="Technology"
+                            v-model="formCategory"
+                            required
+                          />
+                          <label class="form-check-label" for="formCatTech"
+                            >Technology</label
+                          >
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            id="formCatMark"
+                            value="Marketing"
+                            v-model="formCategory"
+                            required
+                          />
+                          <label class="form-check-label" for="formCatMark"
+                            >Marketing</label
+                          >
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            id="formCatFin"
+                            value="Finance"
+                            v-model="formCategory"
+                            required
+                          />
+                          <label class="form-check-label" for="formCatFin"
+                            >Finance</label
+                          >
+                        </div>
                       </div>
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          id="formCatTech"
-                          value="Technology"
-                          v-model="formCategory"
-                          required
-                        />
-                        <label class="form-check-label" for="formCatTech"
-                          >Technology</label
-                        >
-                      </div>
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          id="formCatMark"
-                          value="Marketing"
-                          v-model="formCategory"
-                          required
-                        />
-                        <label class="form-check-label" for="formCatMark"
-                          >Marketing</label
-                        >
-                      </div>
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          id="formCatFin"
-                          value="Finance"
-                          v-model="formCategory"
-                          required
-                        />
-                        <label class="form-check-label" for="formCatFin"
-                          >Finance</label
-                        >
-                      </div>
-                    </div>
-                  </fieldset>
-                </div>
+                    </fieldset>
+                  </div>
 
-                <div class="mb-3">
-                  <label for="eventSelect" class="form-label"
-                    >Event Name:</label
-                  >
-                  <select
-                    id="eventSelect"
-                    class="form-select"
-                    v-model="formSelectedEventId"
-                    :disabled="categoryEvents.length === 0"
-                    required
-                  >
-                    <option disabled value="">-- Select an Event --</option>
-                    <option
-                      v-for="event in categoryEvents"
-                      :key="event.eventid"
-                      :value="event.eventid"
+                  <div class="mb-3">
+                    <label for="eventSelect" class="form-label"
+                      >Event Name:</label
                     >
-                      {{ event.eventname }}
-                    </option>
-                  </select>
-                </div>
+                    <select
+                      id="eventSelect"
+                      class="form-select"
+                      v-model="formSelectedEventId"
+                      :disabled="categoryEvents.length === 0"
+                      required
+                    >
+                      <option disabled value="">-- Select an Event --</option>
+                      <option
+                        v-for="event in categoryEvents"
+                        :key="event.eventid"
+                        :value="event.eventid"
+                      >
+                        {{ event.eventname }}
+                      </option>
+                    </select>
+                  </div>
+                </fieldset>
               </form>
             </div>
           </div>
@@ -573,10 +578,10 @@ const goToPage = (page) => {
         <div class="col-md-12 mt-4">
           <div class="card shadow-sm border-success">
             <div class="card-header bg-success text-white fw-bold">
-              Registration Summary
+              <h3 class="h5 mb-0">Registration Summary</h3>
             </div>
             <div class="card-body">
-              <p class="card-text">Check your details below:</p>
+              <p class="card-text">Check your details:</p>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   <strong>Username: </strong>
@@ -688,7 +693,8 @@ table thead th {
 
 /* Remove default fieldset styling to maintain visual appearance */
 fieldset {
-  border: none;
+  border: none !important;
+  outline: none;
   padding: 0;
   margin: 0;
   min-width: 0;
